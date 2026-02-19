@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "./api/axios";
 import "./Tasks.css";
+import logoutIcon from "./assets/switch.png";
 
-function Tasks({ user }) {
+function Tasks({ user, onLogout }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -113,6 +114,10 @@ function Tasks({ user }) {
   return (
     <div className="tasks-wrapper">
       <div className="tasks-card">
+        <button className="logout-btn" onClick={onLogout}>
+          <img src={logoutIcon} alt="Logout" className="logout-icon" />
+        </button>
+
         <h2>Task Manager</h2>
 
         {error && <p style={{ color: "red" }}>{error}</p>}

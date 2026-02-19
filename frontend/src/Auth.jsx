@@ -21,6 +21,7 @@ function Auth({ onLogin }) {
         password
       });
 
+      localStorage.setItem("user", JSON.stringify(res.data));
       onLogin(res.data);
     } catch (err) {
       setError(err.response?.data || "Authentication failed.");
