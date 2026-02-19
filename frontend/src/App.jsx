@@ -1,13 +1,15 @@
-import './App.css'
-import Tasks from "./Tasks"
+import { useState } from "react";
+import Auth from "./Auth";
+import Tasks from "./Tasks";
 
 function App() {
-  return (
-    <div className="app">
-      <h1>📝 React Task Evaluator</h1>
-      <Tasks />
-    </div>
-  );
+  const [user, setUser] = useState(null);
+
+  if (!user) {
+    return <Auth onLogin={setUser} />;
+  }
+
+  return <Tasks user={user} />;
 }
 
-export default App
+export default App;

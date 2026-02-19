@@ -1,0 +1,180 @@
+.tasks-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.tasks-card {
+  background: white;
+  width: 500px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tasks-card h2 {
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.tasks-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.tasks-input-group input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: 0.2s ease;
+}
+
+.tasks-input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.tasks-input-group button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #667eea;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tasks-input-group button:hover {
+  background: #5a67d8;
+}
+
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tasks-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f7f8fc;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: 0.2s ease;
+}
+
+.tasks-item:hover {
+  background: #eef1ff;
+}
+
+.tasks-text {
+  cursor: pointer;
+}
+
+.tasks-delete {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tasks-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.tasks-edit-mode {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  animation: fadeSlide 0.2s ease-in-out;
+}
+
+.tasks-edit-input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.tasks-edit-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.tasks-edit{
+  background: #e9b117;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+
+.tasks-save {
+  background: #6bc57a;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tasks-edit:hover{
+  background: #aa7f0a;
+}
+
+
+.tasks-save:hover {
+  background: #4ba548;
+}
+
+.tasks-cancel {
+  background: #e2e8f0;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tasks-delete {
+  background: #f56565;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tasks-delete:hover {
+  background: #e53e3e;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
