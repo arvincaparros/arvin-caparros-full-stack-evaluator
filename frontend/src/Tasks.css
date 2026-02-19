@@ -154,6 +154,24 @@
   cursor: pointer;
 }
 
+.tasks-done {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tasks-done:hover {
+  background-color: #3e8e41;
+}
+
+.tasks-item.completed {
+  background-color: #f5f5f5;
+}
+
 .tasks-delete {
   background: #f56565;
   color: white;

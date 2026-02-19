@@ -75,7 +75,9 @@ namespace TaskManager.API
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] TaskUpdateDto dto)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var task = await _context.Tasks
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == dto.UserId);
+
             if (task == null)
                 return NotFound();
 
@@ -91,6 +93,28 @@ namespace TaskManager.API
                 task.IsDone
             });
         }
+
+
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(int id, [FromBody] TaskUpdateDto dto)
+        //{
+        //    var task = await _context.Tasks.FindAsync(id);
+        //    if (task == null)
+        //        return NotFound();
+
+        //    task.Title = dto.Title;
+        //    task.IsDone = dto.IsDone;
+
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok(new
+        //    {
+        //        task.Id,
+        //        task.Title,
+        //        task.IsDone
+        //    });
+        //}
+
 
         // Deletes a task by ID.
         [HttpDelete("{id}")]

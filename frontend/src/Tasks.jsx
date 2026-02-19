@@ -11,7 +11,9 @@ function Tasks({ user, onLogout }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Load Tasks (per user)
+  // =========================
+  // Fetch Tasks
+  // =========================
   const fetchTasks = async () => {
     if (!user) return;
 
@@ -28,14 +30,14 @@ function Tasks({ user, onLogout }) {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchTasks();
-    }
+    fetchTasks();
   }, [user]);
 
+  // =========================
   // Add Task
+  // =========================
   const addTask = async () => {
-    if (!newTask.trim() || !user) return;
+    if (!newTask.trim()) return;
 
     try {
       const res = await api.post("/tasks", {
@@ -51,27 +53,47 @@ function Tasks({ user, onLogout }) {
     }
   };
 
-  // Toggle Done
-  const toggleTask = async (task) => {
+  // =========================
+  // Unified Update (Edit / Done)
+  // =========================
+  const updateTask = async (taskId, updatedFields) => {
     try {
-      await api.put(`/tasks/${task.id}`, {
-        title: task.title,
-        isDone: !task.isDone,
+      const current = tasks.find(t => t.id === taskId);
+
+      const res = await api.put(`/tasks/${taskId}`, {
+        title: updatedFields.title ?? current.title,
+        isDone: updatedFields.isDone ?? current.isDone,
         userId: user.id
       });
 
       setTasks(prev =>
-        prev.map(t =>
-          t.id === task.id ? { ...t, isDone: !t.isDone } : t
-        )
+        prev.map(t => (t.id === taskId ? res.data : t))
       );
+
     } catch (err) {
       console.error(err);
       setError("Failed to update task.");
     }
   };
 
+  // Toggle Done
+  const toggleTask = (task) => {
+    updateTask(task.id, { isDone: !task.isDone });
+  };
+
+  // Save Edited Title
+  const saveEdit = () => {
+    if (!editValue.trim()) return;
+
+    updateTask(editingId, { title: editValue });
+
+    setEditingId(null);
+    setEditValue("");
+  };
+
+  // =========================
   // Delete Task
+  // =========================
   const deleteTask = async (id) => {
     try {
       await api.delete(`/tasks/${id}?userId=${user.id}`);
@@ -82,38 +104,12 @@ function Tasks({ user, onLogout }) {
     }
   };
 
-  // Update Title
-  const updateTask = async (id) => {
-    if (!editValue.trim()) return;
-
-    try {
-      const current = tasks.find(t => t.id === id);
-
-      await api.put(`/tasks/${id}`, {
-        title: editValue,
-        isDone: current?.isDone,
-        userId: user.id
-      });
-
-      setTasks(prev =>
-        prev.map(t =>
-          t.id === id ? { ...t, title: editValue } : t
-        )
-      );
-
-      setEditingId(null);
-      setEditValue("");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to update task.");
-    }
-  };
-
   if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
     <div className="tasks-wrapper">
       <div className="tasks-card">
+
         <button className="logout-btn" onClick={onLogout}>
           <img src={logoutIcon} alt="Logout" className="logout-icon" />
         </button>
@@ -139,7 +135,10 @@ function Tasks({ user, onLogout }) {
         ) : (
           <ul className="tasks-list">
             {tasks.map((task) => (
-              <li key={task.id} className="tasks-item">
+              <li
+                key={task.id}
+                className={`tasks-item ${task.isDone ? "completed" : ""}`}
+              >
                 {editingId === task.id ? (
                   <div className="tasks-edit-mode">
                     <input
@@ -151,7 +150,7 @@ function Tasks({ user, onLogout }) {
                     <div className="tasks-actions">
                       <button
                         className="tasks-save"
-                        onClick={() => updateTask(task.id)}
+                        onClick={saveEdit}
                       >
                         Save
                       </button>
@@ -167,15 +166,16 @@ function Tasks({ user, onLogout }) {
                   <>
                     <span
                       className="tasks-text"
-                      onClick={() => toggleTask(task)}
                       style={{
-                        textDecoration: task.isDone ? "line-through" : "none"
+                        textDecoration: task.isDone ? "line-through" : "none",
+                        opacity: task.isDone ? 0.6 : 1
                       }}
                     >
                       {task.title}
                     </span>
 
                     <div className="tasks-actions">
+
                       <button
                         className="tasks-edit"
                         onClick={() => {
@@ -187,11 +187,19 @@ function Tasks({ user, onLogout }) {
                       </button>
 
                       <button
+                        className="tasks-done"
+                        onClick={() => toggleTask(task)}
+                      >
+                        {task.isDone ? "Undo" : "Done"}
+                      </button>
+
+                      <button
                         className="tasks-delete"
                         onClick={() => deleteTask(task.id)}
                       >
                         Delete
                       </button>
+
                     </div>
                   </>
                 )}
